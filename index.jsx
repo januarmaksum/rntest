@@ -1,30 +1,104 @@
 import * as React from 'react';
 import {AppRegistry} from 'react-native';
+import {Button, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import App from './App';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {name as appName} from './app.json';
-import ProfileScreen from './src/screens/ProfileScreen';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Stack = createNativeStackNavigator();
+function SettingsScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Settings Screen</Text>
+      <Button
+        title="Go to Profile"
+        onPress={() => navigation.navigate('Profile')}
+      />
+    </View>
+  );
+}
+
+function ProfileScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Profile Screen</Text>
+      <Button
+        title="Go to Settings"
+        onPress={() => navigation.navigate('Settings')}
+      />
+    </View>
+  );
+}
+
+function HomeScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Home Screen </Text>
+      <MaterialCommunityIcons name="home" color={'red'} size={24} />
+      <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Details')}
+      />
+    </View>
+  );
+}
+
+function DetailsScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Details Screen</Text>
+      <Button
+        title="Go to Details... again"
+        onPress={() => navigation.push('Details')}
+      />
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+const SettingsStack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 
 export default function Main() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={App}
-          options={{title: 'Welcome'}}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{title: 'Profile'}}
-        />
-      </Stack.Navigator>
+      <Tab.Navigator
+        screenOptions={{headerShown: false, tabBarActiveTintColor: '#e91e63'}}>
+        <Tab.Screen
+          name="First"
+          options={{
+            tabBarIcon: () => (
+              <MaterialCommunityIcons name="home" color={'red'} size={24} />
+            ),
+          }}>
+          {() => (
+            <SettingsStack.Navigator>
+              <SettingsStack.Screen
+                name="Settings"
+                component={SettingsScreen}
+              />
+              <SettingsStack.Screen name="Profile" component={ProfileScreen} />
+            </SettingsStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen
+          name="Second"
+          options={{
+            tabBarIcon: () => (
+              <MaterialCommunityIcons name="account" color={'red'} size={24} />
+            ),
+          }}>
+          {() => (
+            <HomeStack.Navigator>
+              <HomeStack.Screen name="Home" component={HomeScreen} />
+              <HomeStack.Screen name="Details" component={DetailsScreen} />
+            </HomeStack.Navigator>
+          )}
+        </Tab.Screen>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => Main);

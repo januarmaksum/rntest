@@ -9,7 +9,12 @@ import {
 } from 'react-native';
 
 function App({navigation}) {
-  console.log('kok gak masuk kocak');
+  const handlePress = () => {
+    navigation.navigate('Listing', {
+      itemId: 70,
+      userName: 'Januar maksum',
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,10 +25,7 @@ function App({navigation}) {
       />
       <View>
         <Text>Home Screen</Text>
-        <Button
-          title="go to about"
-          onPress={() => navigation.navigate('Profile')}
-        />
+        <Button title="go to listing" onPress={handlePress} />
       </View>
     </SafeAreaView>
   );
